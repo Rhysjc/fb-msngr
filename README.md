@@ -40,3 +40,53 @@ app.listen(<port>, function() {
 	console.log('Bot running');
 });
 ```
+
+#### Details
+---
+Below is a detailed explanation of each part of the module.
+
+###### `module.verify`
+This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails.
+```javascript
+app.get('/webook', fbMsngr.verify('Error message'));
+```
+
+###### `module.onAuth`
+Set a function to handle authentication. The `id` parameter is the user id of the authenticated user. The `optin` parameter is your defined optin reference.
+```javascript
+fbMsngr.onAuth(function(id, optin) {
+	//Do stuff...
+});
+```
+
+###### `module.onTextReceived`
+Set a function to handle text messages. The `id` parameter is the user id of the authenticated user. The `text` parameter is the sent text.
+```javascript
+fbMsngr.onTextReceived(function(id, text) {
+	//Do stuff...
+});
+```
+
+###### `module.onMediaReceived`
+Set a function to handle media messages. The `id` parameter is the user id of the authenticated user. The `attachments` parameter is the sent attachment.
+```javascript
+fbMsngr.onMediaReceived(function(id, attachments) {
+	//Do stuff...
+});
+```
+
+###### `module.onPostback`
+Set a function to handle postbacks. The `id` parameter is the user id of the authenticated user. The `postback` parameter is the postback object.
+```javascript
+fbMsngr.onPostback(function(id, postback) {
+	//Do stuff...
+});
+```
+
+###### `module.onDelivered`
+Set a function to handle message delivery. The `id` parameter is the user id of the authenticated user. The `mid` parameter is the id of the message that was delivered.
+```javascript
+fbMsngr.onDelivered(function(id, mid) {
+	//Do stuff...
+});
+```
