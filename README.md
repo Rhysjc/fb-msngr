@@ -5,7 +5,8 @@
 
 ##### Example Usage
 ---
-```//Load express
+```javascript
+//Load express
 var express = require('express');
 var app = express();
 
