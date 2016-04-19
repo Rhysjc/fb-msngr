@@ -1,0 +1,30 @@
+{
+  "name": "fb-msngr",
+  "version": "1.0.0",
+  "description": "A node module for building messenger bots",
+  "main": "messenger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rhysjc/fb-msngr.git"
+  },
+  "keywords": [
+    "fb",
+    "facebook",
+    "bot",
+    "bots",
+    "messenger",
+    "msngr"
+  ],
+  "author": "Rhys Camm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rhysjc/fb-msngr/issues"
+  },
+  "homepage": "https://github.com/Rhysjc/fb-msngr#readme",
+  "dependencies": {
+    "async": "^1.5.2"
+  }
+}
