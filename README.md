@@ -1,7 +1,6 @@
 # fb-msngr
-### A node module for building messenger bots
 ---
-`fb-msngr` is a node module meant to be used in conjuction with express to build bots for Facebook's Messenger platform.
+`fb-msngr` is a node module for building bots for Facebook's Messenger platform.
 
 ##### Example Usage
 ---
@@ -46,7 +45,7 @@ app.listen(<port>, function() {
 Below is a detailed explanation of each part of the module.
 
 ###### `fbMsngr.verify`
-This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails.
+This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails. You can write your own verification route if you're not using express. All other methods are framework agnostic.
 ```javascript
 app.get('/webook/', fbMsngr.verify('Error message'));
 ```
