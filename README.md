@@ -27,7 +27,7 @@ fbMsngr.onTextReceived(function(uid, text) {
 });
 
 //Handle verification with the build in middleware
-app.get('/webhook', fbMsngr.verify('Failed to verify'));
+app.get('/webhook/', fbMsngr.verify('Failed to verify'));
 
 //Handle the received message
 app.post('/webook/', function(req, res) {
@@ -48,7 +48,7 @@ Below is a detailed explanation of each part of the module.
 ###### `fbMsngr.verify`
 This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails.
 ```javascript
-app.get('/webook', fbMsngr.verify('Error message'));
+app.get('/webook/', fbMsngr.verify('Error message'));
 ```
 
 ###### `fbMsngr.onAuth`
