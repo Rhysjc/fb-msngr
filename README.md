@@ -150,4 +150,4 @@ fbMsngr.buildPostbackButton(title, payload);
 #### To-do List
 ---
 1. Switch over loops to use async
-2. Decouple from express
+2. Implement receipt messages
