@@ -146,3 +146,8 @@ Builds a button that sends a postback to your server. `title` is the title, whil
 ```javascript
 fbMsngr.buildPostbackButton(title, payload);
 ```
+
+#### To-do List
+---
+1. Switch over loops to use async
+2. Decouple from express
