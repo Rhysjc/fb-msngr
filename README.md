@@ -43,6 +43,15 @@ app.listen(<port>, function() {
 #### Details
 ---
 Below is a detailed explanation of each part of the module.
+###### `require('fb-msngr')(config)`
+Upon including the module you must pass in a config object of the form below. `access_token` is your page access token and `verify_token` is the token you enter when you setup your webhook, both of these are created in the Facebook Developers console. `notification_type` is the type of notification your bot will create. This can be either `REGULAR`, `SILENT_PUSH` or `NO_PUSH`.
+```javascript
+var fbMsngr = require('fb-msngr')({
+	access_token: <access_token>,
+	notification_type: <notification_type>,
+	verify_token: <verify_token>
+});
+```
 
 ###### `fbMsngr.verify`
 This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails. You can write your own verification route if you're not using express. All other methods are framework agnostic.
