@@ -145,6 +145,30 @@ module.exports = function(config) {
 		return button;
 	};
 
+	module.getProfile = function(id, cb) {
+		var requestBody = {
+		    url: 'https://graph.facebook.com/v2.6/'+id,
+		    qs: {
+		    	fields:'first_name,last_name,profile_pic',
+		    	access_token: config.access_token
+		   	},
+		    method: 'GET'
+		};
+
+		request(requestBody, function(err, resp, body) {
+			if(!err && body.first_name) {
+				//All good
+				cb(undefined, body.first_name, body.last_name, body.profile_pic);
+			} else if(!err && !body.first_name) {
+				//No error but didn't get what we wanted
+				cb("Data not returned");
+			} else {
+				//Error
+				cb(err);
+			}
+		});
+	};
+
 	//Our webook callbacks
 	var onAuth, onTextReceived, onMediaReceived, onPostback, onDelivered;
 	//Methods for setting the callback

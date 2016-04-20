@@ -53,6 +53,14 @@ var fbMsngr = require('fb-msngr')({
 });
 ```
 
+###### `fbMsngr.getProfile`
+Get a users profile info. `id` is the user id. The callback function may return an `err`, otherwise `first_name` and `last_name` are the user's first and last names respectively. `profile_pic` is the URL of the profile picture.
+```javascript
+fbMsngr.getProfile(id, function(err, first_name, last_name, profile_pic) {
+	//Do stuff
+});
+```
+
 ###### `fbMsngr.verify`
 This is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails. You can write your own verification route if you're not using express. All other methods are framework agnostic.
 ```javascript

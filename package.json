@@ -1,6 +1,6 @@
 {
   "name": "fb-msngr",
-  "version": "0.1.41",
+  "version": "0.2.0",
   "description": "A node module for building messenger bots",
   "main": "fb-msngr.js",
   "repository": {
