@@ -1,0 +1,93 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.5.1
+3 info using node@v0.12.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec { raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/rhys.camm/Development/fb-msngr',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/rhys.camm/.npm/fb-msngr/0.2.0/package.tgz not in flight; packing
+9 verbose tar pack [ '/Users/rhys.camm/.npm/fb-msngr/0.2.0/package.tgz',
+9 verbose tar pack   '/Users/rhys.camm/Development/fb-msngr' ]
+10 verbose tarball /Users/rhys.camm/.npm/fb-msngr/0.2.0/package.tgz
+11 verbose folder /Users/rhys.camm/Development/fb-msngr
+12 info prepublish fb-msngr@0.2.0
+13 verbose addLocalTarball adding from inside cache /Users/rhys.camm/.npm/fb-msngr/0.2.0/package.tgz
+14 silly cache afterAdd fb-msngr@0.2.0
+15 verbose afterAdd /Users/rhys.camm/.npm/fb-msngr/0.2.0/package/package.json not in flight; writing
+16 verbose afterAdd /Users/rhys.camm/.npm/fb-msngr/0.2.0/package/package.json written
+17 silly publish { name: 'fb-msngr',
+17 silly publish   version: '0.2.0',
+17 silly publish   description: 'A node module for building messenger bots',
+17 silly publish   main: 'fb-msngr.js',
+17 silly publish   repository:
+17 silly publish    { type: 'git',
+17 silly publish      url: 'git+https://github.com/Rhysjc/fb-msngr.git' },
+17 silly publish   keywords: [ 'fb', 'facebook', 'bot', 'bots', 'messenger', 'msngr' ],
+17 silly publish   author: { name: 'Rhys Camm' },
+17 silly publish   license: 'MIT',
+17 silly publish   dependencies: { async: '^1.5.2', request: '^2.72.0' },
+17 silly publish   readme: '# fb-msngr\n---\n`fb-msngr` is a node module for building bots for Facebook\'s Messenger platform.\n\n##### Example Usage\n---\n```javascript\n//Load express\nvar express = require(\'express\');\nvar app = express();\n\n//We need body parser to read the message contents\nvar bodyParser = require(\'body-parser\');\napp.use(bodyParser.json());\n\n//Initiate fb-msngr with the required info\nvar fbMsngr = require(\'fb-msngr\')({\n\taccess_token: <access_token>,\n\tnotification_type: <notification_type>,\n\tverify_token: <verify_token>\n});\n\n//Handle the receipt of text messages\nfbMsngr.onTextReceived(function(uid, text) {\n\tconsole.log(text);\n});\n\n//Handle verification with the build in middleware\napp.get(\'/webhook/\', fbMsngr.verify(\'Failed to verify\'));\n\n//Handle the received message\napp.post(\'/webook/\', function(req, res) {\n\tfbMsngr.handle(req.body);\n\tres.sendStatus(200);\n});\n\n//Run our app\napp.listen(<port>, function() {\n\tconsole.log(\'Bot running\');\n});\n```\n\n#### Details\n---\nBelow is a detailed explanation of each part of the module.\n###### `require(\'fb-msngr\')(config)`\nUpon including the module you must pass in a config object of the form below. `access_token` is your page access token and `verify_token` is the token you enter when you setup your webhook, both of these are created in the Facebook Developers console. `notification_type` is the type of notification your bot will create. This can be either `REGULAR`, `SILENT_PUSH` or `NO_PUSH`.\n```javascript\nvar fbMsngr = require(\'fb-msngr\')({\n\taccess_token: <access_token>,\n\tnotification_type: <notification_type>,\n\tverify_token: <verify_token>\n});\n```\n\n###### `fbMsngr.getProfile`\nGet a users profile info. `id` is the user id. The callback function may return an `err`, otherwise `first_name` and `last_name` are the user\'s first and last names respectively. `profile_pic` is the URL of the profile picture.\n```javascript\nfbMsngr.getProfile(id, function(err, first_name, last_name, profile_pic) {\n\t//Do stuff\n});\n```\n\n###### `fbMsngr.verify`\nThis is an express middleware used to verify your bot. Simply apply this middleware to the `GET` route on `/webhook`. You can pass a string to send to the client if verification fails. You can write your own verification route if you\'re not using express. All other methods are framework agnostic.\n```javascript\napp.get(\'/webook/\', fbMsngr.verify(\'Error message\'));\n```\n\n###### `fbMsngr.onAuth`\nSet a function to handle authentication. The `id` parameter is the user id of the authenticated user. The `optin` parameter is your defined optin reference.\n```javascript\nfbMsngr.onAuth(function(id, optin) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.onTextReceived`\nSet a function to handle text messages. The `id` parameter is the user id of the authenticated user. The `text` parameter is the sent text.\n```javascript\nfbMsngr.onTextReceived(function(id, text) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.onMediaReceived`\nSet a function to handle media messages. The `id` parameter is the user id of the authenticated user. The `attachments` parameter is the sent attachment.\n```javascript\nfbMsngr.onMediaReceived(function(id, attachments) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.onPostback`\nSet a function to handle postbacks. The `id` parameter is the user id of the authenticated user. The `postback` parameter is the postback object.\n```javascript\nfbMsngr.onPostback(function(id, postback) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.onDelivered`\nSet a function to handle message delivery. The `id` parameter is the user id of the authenticated user. The `mid` parameter is the id of the message that was delivered.\n```javascript\nfbMsngr.onDelivered(function(id, mid) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.onDelivered`\nSet a function to handle message delivery. The `id` parameter is the user id of the authenticated user. The `mid` parameter is the id of the message that was delivered.\n```javascript\nfbMsngr.onDelivered(function(id, mid) {\n\t//Do stuff...\n});\n```\n\n###### `fbMsngr.sendTextMessage`\nSend a text message. `id` is the user id to send to, and `text` is the text. The structure of the callback function is the same for all of the following `send` functions and is defined below.\n```javascript\nfbMsngr.sendTextMessage(id, text, callback);\n```\n\n###### `fbMsngr.sendImageMessage`\nSend an image message. `id` is the user id to send to, and `url` is the media url.\n```javascript\nfbMsngr.sendImageMessage(id, url, callback);\n```\n\n###### `fbMsngr.sendGenericTemplateMessage`\nSend a generic template message. `id` is the user id to send to, and `bubbles` is an array of the bubbles to send. The `buildBubble` function below shows how to build these.\n```javascript\nfbMsngr.sendGenericTemplateMessage(id, bubbles, callback);\n```\n\n###### `fbMsngr.sendButtonTemplateMessage`\nSend a button template message. `id` is the user id to send to, and `buttons` is an array of the buttons to send. The `buildURLButton` and `buildPostbackButton` functions below shows how to build these.\n```javascript\nfbMsngr.sendButtonTemplateMessage(id, buttons, callback);\n```\n\n###### `callback`\nAll of the `send` functions above share the same callback structure. `err` is any errors that may have been thrown. `id` contains the id of the user the message was sent to, and `mid` the id of the message sent.\n```javascript\nfunction(err, id, mid);\n```\n\n###### `buildBubble`\nBuilds a bubble object for use in `sendGenericTemplateMessage`. `title` is the bubble title, `url` is the URL that the bubble will link to, which is optional and can just be an empty string. `image_url` is the image sent along with the bubble, which is also optional. `subtitle` is the optional bubble subtitle. `buttons` is an array of buttons, that can be built with the below functions.\n```javascript\nfbMsngr.buildBubble(title, url, image, subtitle, buttons);\n```\n\n###### `buildURLButton`\nBuilds a button that links out to a URL. `title` is the title and the `url` is the URL that will be linked out to.\n```javascript\nfbMsngr.buildURLButton(title, url);\n```\n\n###### `buildPostbackButton`\nBuilds a button that sends a postback to your server. `title` is the title, while `payload` is the postback object that will be sent back to your server.\n```javascript\nfbMsngr.buildPostbackButton(title, payload);\n```\n\n#### To-do List\n---\n1. Switch over loops to use async\n2. Implement receipt messages',
+17 silly publish   readmeFilename: 'README.md',
+17 silly publish   gitHead: 'c20e8da1e41bb12242b65c26d30ee8cc757c5a79',
+17 silly publish   bugs: { url: 'https://github.com/Rhysjc/fb-msngr/issues' },
+17 silly publish   homepage: 'https://github.com/Rhysjc/fb-msngr',
+17 silly publish   _id: 'fb-msngr@0.2.0',
+17 silly publish   scripts: {},
+17 silly publish   _shasum: 'd60aad77ab8b742e87dea2616508cd8a39f7347f',
+17 silly publish   _from: '.' }
+18 silly mapToRegistry name fb-msngr
+19 silly mapToRegistry using default registry
+20 silly mapToRegistry registry https://registry.npmjs.org/
+21 silly mapToRegistry uri https://registry.npmjs.org/fb-msngr
+22 verbose publish registryBase https://registry.npmjs.org/
+23 silly publish uploading /Users/rhys.camm/.npm/fb-msngr/0.2.0/package.tgz
+24 verbose request uri https://registry.npmjs.org/fb-msngr
+25 verbose request sending authorization for write operation
+26 info attempt registry request try #1 at 5:50:35 PM
+27 verbose request using bearer token for auth
+28 verbose request id 147effcedb476279
+29 http request PUT https://registry.npmjs.org/fb-msngr
+30 http 403 https://registry.npmjs.org/fb-msngr
+31 verbose headers { 'content-type': 'application/json',
+31 verbose headers   'cache-control': 'max-age=300',
+31 verbose headers   'content-length': '95',
+31 verbose headers   'accept-ranges': 'bytes',
+31 verbose headers   date: 'Wed, 20 Apr 2016 16:50:37 GMT',
+31 verbose headers   via: '1.1 varnish',
+31 verbose headers   connection: 'keep-alive',
+31 verbose headers   'x-served-by': 'cache-lhr6332-LHR',
+31 verbose headers   'x-cache': 'MISS',
+31 verbose headers   'x-cache-hits': '0',
+31 verbose headers   'x-timer': 'S1461171035.964997,VS0,VE1127',
+31 verbose headers   vary: 'Accept-Encoding' }
+32 verbose request invalidating /Users/rhys.camm/.npm/registry.npmjs.org/fb-msngr on PUT
+33 error publish Failed PUT 403
+34 verbose stack Error: "You cannot publish over the previously published version 0.2.0." : fb-msngr
+34 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:254:14)
+34 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:178:14)
+34 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:344:22)
+34 verbose stack     at Request.emit (events.js:110:17)
+34 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1239:14)
+34 verbose stack     at Request.emit (events.js:129:20)
+34 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1187:12)
+34 verbose stack     at IncomingMessage.emit (events.js:129:20)
+34 verbose stack     at _stream_readable.js:908:16
+34 verbose stack     at process._tickCallback (node.js:355:11)
+35 verbose statusCode 403
+36 verbose pkgid fb-msngr
+37 verbose cwd /Users/rhys.camm/Development/fb-msngr
+38 error Darwin 13.4.0
+39 error argv "node" "/usr/local/bin/npm" "publish"
+40 error node v0.12.1
+41 error npm  v2.5.1
+42 error code E403
+43 error "You cannot publish over the previously published version 0.2.0." : fb-msngr
+44 error If you need help, you may report this error at:
+44 error     <http://github.com/npm/npm/issues>
+45 verbose exit [ 1, true ]
