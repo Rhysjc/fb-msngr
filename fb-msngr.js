@@ -156,6 +156,7 @@ module.exports = function(config) {
 		};
 
 		request(requestBody, function(err, resp, body) {
+			var body = JSON.parse(body);
 			if(!err && body.first_name) {
 				//All good
 				cb(undefined, body.first_name, body.last_name, body.profile_pic);
