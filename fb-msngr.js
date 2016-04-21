@@ -23,10 +23,14 @@ module.exports = function(config) {
 	function sendMessage(recipient, message, cb) {
 		var requestBody = buildRequest(recipient, message);
 		request(requestBody, function(err, resp, body) {
-			if(!err && resp.statusCode == 200) {
+			if(resp.statusCode == 200 && body.recipient_id) {
 				//Message delivered
 				if(cb) {
 					cb(undefined, body.recipient_id, body.message_id);
+				}
+			} else if (resp.statusCode == 200 && body.error) {
+				if(cb) {
+					cb(body.error.message);
 				}
 			} else if (resp.statusCode == 100) {
 				//No user found
@@ -162,7 +166,7 @@ module.exports = function(config) {
 				cb(undefined, body.first_name, body.last_name, body.profile_pic);
 			} else if(!err && !body.first_name) {
 				//No error but didn't get what we wanted
-				cb("Data not returned");
+				cb("data_not_returned");
 			} else {
 				//Error
 				cb(err);
