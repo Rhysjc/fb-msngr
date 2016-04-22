@@ -213,7 +213,7 @@ module.exports = function(config) {
 			}
 		} else if ('postback' in messaging) {
 			//Postback
-			onPostback(messaging.sender.id, messaging.postback);
+			onPostback(messaging.sender.id, messaging.postback.payload);
 		} else if ('delivery' in messaging) {
 			onDelivered(messaging.sender.id, messaging.delivery.mids[0]);
 		}
