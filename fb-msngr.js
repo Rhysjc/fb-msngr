@@ -10,9 +10,9 @@ module.exports = function(config) {
 		    qs: {access_token:config.access_token},
 		    method: 'POST',
 		    json: {
-		      recipient: {id:recipient},
-		      message: message,
-		      notification_type: config.notification_type
+		    	recipient: {id:recipient},
+		    	message: message,
+		    	notification_type: config.notification_type
 		    }
 		};
 
@@ -217,6 +217,64 @@ module.exports = function(config) {
 		} else if ('delivery' in messaging) {
 			onDelivered(messaging.sender.id, messaging.delivery.mids[0]);
 		}
+	};
+
+	function setWelcomeMessage(message, cb) {
+		var data = {
+			"setting_type":"call_to_actions",
+			"thread_state":"new_thread",
+			"call_to_actions":[
+				{
+			    	"message":message
+			    }
+			]
+		};
+
+		var requestBody = {
+		    url: 'https://graph.facebook.com/v2.6/'+config.page_id+'/thread_settings',
+		    qs: {access_token:config.access_token},
+		    method: 'POST',
+		    json: data
+		};
+
+		request(requestBody, function(err, resp, body) {
+			if(!err && body.result == "Successfully added new_thread's CTAs") {
+				//All good
+				cb(undefined);
+			} else if (!err && body.result != "Successfully added new_thread's CTAs") {
+				cb("not_set");
+			} else {
+				cb(err);
+			}
+		});
+	}
+
+	//Set welcome message
+	module.setTextWelcomeMessage = function(text, cb) {
+		var message = {
+			"text":text
+		};
+
+		setWelcomeMessage(message, function(err) {
+			cb(err);
+		});
+	
+	};
+
+	module.setGenericWelcomeMessage = function(bubbles, cb) {
+		var message = {
+			"attachment": {
+				"type": "template",
+				"payload": {
+					"template_type":"generic",
+					"elements": bubbles
+				}
+			}
+		};
+
+		setWelcomeMessage(message, function(err) {
+			cb(err);
+		});
 	};
 
 	//Verify middleware

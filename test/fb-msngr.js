@@ -3,7 +3,8 @@ var messages = require('./messages');
 var fbMsngr = require('../fb-msngr')({
 	access_token: config.access_token,
 	verify_token: config.verify_token,
-	notification_type: 'REGULAR'
+	notification_type: 'REGULAR',
+	page_id: config.page_id
 });
 var expect = require('chai').expect;
 
@@ -137,7 +138,7 @@ describe("fb-msngr", function() {
 
 	describe("getProfile()", function() {
 
-		it('Should build a postback button', function(done) {
+		it('Should get the profile data', function(done) {
 			fbMsngr.getProfile(config.uid, function(err, first, last, pic) {
 				expect(first).to.equal(config.first_name);
 				expect(last).to.equal(config.last_name);
@@ -247,6 +248,40 @@ describe("fb-msngr", function() {
 				fbMsngr.handle(messages.postback);
 			});
 
+		});
+
+	});
+
+	describe("setTextWelcomeMessage()", function() {
+
+		it('Should set the welcome message', function(done) {
+			fbMsngr.setTextWelcomeMessage("Hello!", function(err) {
+				expect(err).to.equal(undefined);
+				done();
+			});
+		});
+
+	});
+
+	describe("setGenericWelcomeMessage()", function() {
+
+		it('Should set the welcome message', function(done) {
+			var bubbles = [];
+			var buttonsOne = [];
+			buttonsOne.push(fbMsngr.buildURLButton("One", "http://facebook.com"));
+			buttonsOne.push(fbMsngr.buildPostbackButton("One", "POSTBACK"));
+
+			var buttonsTwo = [];
+			buttonsTwo.push(fbMsngr.buildURLButton("Two", "http://facebook.com"));
+			buttonsTwo.push(fbMsngr.buildPostbackButton("Two", "POSTBACK"));
+
+			bubbles.push(fbMsngr.buildBubble("First", "http://google.co.uk", "http://media.mydogspace.com.s3.amazonaws.com/wp-content/uploads/2013/08/puppy-500x350.jpg", "First Subtitle", buttonsOne));
+			bubbles.push(fbMsngr.buildBubble("Second", "", "", "",buttonsTwo));
+			
+			fbMsngr.setGenericWelcomeMessage(bubbles, function(err) {
+				expect(err).to.equal(undefined);
+				done();
+			});
 		});
 
 	});

@@ -17,7 +17,8 @@ app.use(bodyParser.json());
 var fbMsngr = require('fb-msngr')({
 	access_token: <access_token>,
 	notification_type: <notification_type>,
-	verify_token: <verify_token>
+	verify_token: <verify_token>,
+	page_id: <page_id>
 });
 
 //Handle the receipt of text messages
@@ -44,12 +45,13 @@ app.listen(<port>, function() {
 ---
 Below is a detailed explanation of each part of the module.
 ###### `require('fb-msngr')(config)`
-Upon including the module you must pass in a config object of the form below. `access_token` is your page access token and `verify_token` is the token you enter when you setup your webhook, both of these are created in the Facebook Developers console. `notification_type` is the type of notification your bot will create. This can be either `REGULAR`, `SILENT_PUSH` or `NO_PUSH`.
+Upon including the module you must pass in a config object of the form below. `access_token` is your page access token and `verify_token` is the token you enter when you setup your webhook, both of these are created in the Facebook Developers console. `notification_type` is the type of notification your bot will create. This can be either `REGULAR`, `SILENT_PUSH` or `NO_PUSH`. Finally, `page_id` is the id of the page you're using for your bot.
 ```javascript
 var fbMsngr = require('fb-msngr')({
 	access_token: <access_token>,
 	notification_type: <notification_type>,
-	verify_token: <verify_token>
+	verify_token: <verify_token>,
+	page_id: <page_id>
 });
 ```
 
