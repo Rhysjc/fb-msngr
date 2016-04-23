@@ -147,22 +147,38 @@ All of the `send` functions above share the same callback structure. `err` is an
 function(err, id, mid);
 ```
 
-###### `buildBubble`
+###### `fbMsngr.buildBubble`
 Builds a bubble object for use in `sendGenericTemplateMessage`. `title` is the bubble title, `url` is the URL that the bubble will link to, which is optional and can just be an empty string. `image_url` is the image sent along with the bubble, which is also optional. `subtitle` is the optional bubble subtitle. `buttons` is an array of buttons, that can be built with the below functions.
 ```javascript
 fbMsngr.buildBubble(title, url, image, subtitle, buttons);
 ```
 
-###### `buildURLButton`
+###### `fbMsngr.buildURLButton`
 Builds a button that links out to a URL. `title` is the title and the `url` is the URL that will be linked out to.
 ```javascript
 fbMsngr.buildURLButton(title, url);
 ```
 
-###### `buildPostbackButton`
+###### `fbMsngr.buildPostbackButton`
 Builds a button that sends a postback to your server. `title` is the title, while `payload` is the postback object that will be sent back to your server.
 ```javascript
 fbMsngr.buildPostbackButton(title, payload);
+```
+
+###### `fbMsngr.setTextWelcomeMessage`
+Sets your bots welcome message to a simple text message. The `text` parameter is the text, and the second parameter is a callback function which will hold an error if one has been thrown.
+```javascript
+fbMsngr.setTextWelcomeMessage(text, function(err) {
+	
+});
+```
+
+###### `fbMsngr.setGenericWelcomeMessage`
+Sets the welcome message to a slightly more complex message. `bubbles` is an array of bubbles built with `buildBubble()`, while the second parameter is a callback identical to the one above.
+```javascript
+fbMsngr.setGenericWelcomeMessage(bubbles, function(err) {
+	
+});
 ```
 
 #### To-do List
