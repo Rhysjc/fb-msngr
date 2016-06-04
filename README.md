@@ -141,6 +141,12 @@ Send a button template message. `id` is the user id to send to, and `buttons` is
 fbMsngr.sendButtonTemplateMessage(id, buttons, callback);
 ```
 
+###### `fbMsngr.sendReceiptTemplateMessage`
+Send a receipt template message. `id` is the user id to send to as in previous methods. `name` is the name of the user who the receipt is intended for. `ordernum` is a unique order number (a string) while `currency` is the currency (GBP, USD, etc...). `method` is the payment method, this can be a string such as `"Card"`. `timestamp` is an optional timestamp string, and `url` is the optional URL of the order. `elements` is an array of order elements, which can be built with `buildOrderElement`. `address` is an optional object, which is built through `buildAddress`. `summary` is a required order summary, built with `buildOrderSummary`. Finally, `adjustments` is an optional array of objects built with `buildAdjustment`, these include changes to the order such as sales. The `callback` is as below. Any optional elements can be passed in as `null`, `undefined` or an empty string/array/object.
+```javascript
+fbMsngr.sendButtonTemplateMessage(id, name, ordernum, currency, method, timestamp, url, elements, address, summary, adjustments, callback);
+```
+
 ###### `callback`
 All of the `send` functions above share the same callback structure. `err` is any errors that may have been thrown. `id` contains the id of the user the message was sent to, and `mid` the id of the message sent.
 ```javascript
@@ -165,6 +171,30 @@ Builds a button that sends a postback to your server. `title` is the title, whil
 fbMsngr.buildPostbackButton(title, payload);
 ```
 
+###### `fbMsngr.buildOrderElement`
+Builds a single order element. `title` is the elements title, while `subtitle` is optional. `quantity` and `price` are optional numbers, while `currency` is an optional string (GBP, USD, etc...). `image_url` is an optional URL of an image for this element. Optional variables can be empty strings, which will result in them being removed.
+```javascript
+fbMsngr.buildOrderElement(title, subtitle, quantity, price, currency, image);
+```
+
+###### `fbMsngr.buildAddress`
+Builds an address object. `line1` is the first line of the address, while `line2` is an optional second line. `city` is the city string, `postal` is a string containing the postal code, while `state` and `country` are strings containing the address' state and country respectively. Any optional variables can be passed as empty strings.
+```javascript
+fbMsngr.buildAddress(line1, line2, city, postal, state, country);
+```
+
+###### `fbMsngr.buildSummary`
+Builds the order's summary. All parameters are numbers, and all optional except `cost`, and to omit them just pass an empty string.
+```javascript
+fbMsngr.buildSummary(subtotal, shipping, tax, cost);
+```
+
+###### `fbMsngr.buildAdjustment`
+Builds an order adjustment. This is a change to the standard order such as a sale or voucher code. `name` is the name of the adjustment, and `amount` is the amount as a number. To skip an optional parameter just pass an empty string.
+```javascript
+fbMsngr.buildAdjustment(name, amount);
+```
+
 ###### `fbMsngr.setTextWelcomeMessage`
 Sets your bots welcome message to a simple text message. The `text` parameter is the text, and the second parameter is a callback function which will hold an error if one has been thrown.
 ```javascript
@@ -184,4 +214,3 @@ fbMsngr.setGenericWelcomeMessage(bubbles, function(err) {
 #### To-do List
 ---
 1. Switch over loops to use async
-2. Implement receipt messages

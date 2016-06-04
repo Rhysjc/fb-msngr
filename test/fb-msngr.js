@@ -13,6 +13,7 @@ describe("fb-msngr", function() {
 
 		it('Should send a text message', function(done) {
 			fbMsngr.sendTextMessage(config.uid, "Hello", function(err, uid, mid) {
+				console.log(uid);
 				expect(uid).to.equal(config.uid);
 				done();
 			});
@@ -68,6 +69,25 @@ describe("fb-msngr", function() {
 			});
 		});
 
+	});
+
+	describe("sendReceiptTemplateMessage", function() {
+		it('Should send a receipt template message', function(done) {
+			var elements = [];
+			elements.push(fbMsngr.buildOrderElement("Element", "Sub", 1, 100, "GBP", "http://media.mydogspace.com.s3.amazonaws.com/wp-content/uploads/2013/08/puppy-500x350.jpg"));
+
+			var address = fbMsngr.buildAddress("One", "Two", "London", "E7", "England", "UK");
+
+			var summary = fbMsngr.buildOrderSummary(100, 3, 20, 123);
+
+			var adjustments = [];
+			adjustments.push(fbMsngr.buildAdjustment("Name", 5));
+
+			fbMsngr.sendReceiptTemplateMessage(config.uid, config.first_name, "123", "GBP", "Test", "12345", "http://google.co.uk", elements, address, summary, adjustments, function(err, uid, mid) {
+				expect(uid).to.equal(config.uid);
+				done();
+			});
+		});
 	});
 
 	describe("buildBubble()", function() {
@@ -134,6 +154,49 @@ describe("fb-msngr", function() {
 			expect(button).to.have.property("payload", "POSTBACK");
 		});
 
+	});
+
+
+	describe("buildOrderElement()", function() {
+		it('Should build an order element', function() {
+			var element = fbMsngr.buildOrderElement("Element", "Sub", 1, 100, "GBP", "http://media.mydogspace.com.s3.amazonaws.com/wp-content/uploads/2013/08/puppy-500x350.jpg");
+
+			expect(element).to.have.property("title", "Element");
+			expect(element).to.have.property("subtitle", "Sub");
+			expect(element).to.have.property("quantity", 1);
+			expect(element).to.have.property("price", 100);
+			expect(element).to.have.property("currency", "GBP");
+			expect(element).to.have.property("image_url", "http://media.mydogspace.com.s3.amazonaws.com/wp-content/uploads/2013/08/puppy-500x350.jpg");
+		});
+	});
+
+	describe("buildAddress()", function() {
+		it('Should build an address', function() {
+			var address = fbMsngr.buildAddress("One", "Two", "London", "E7", "England", "UK");
+			expect(address).to.have.property("street_1", "One");
+			expect(address).to.have.property("street_2", "Two");
+			expect(address).to.have.property("city", "London");
+			expect(address).to.have.property("state", "England");
+			expect(address).to.have.property("country", "UK");
+		});
+	});
+
+	describe("buildAdjustment()", function() {
+		it('Should build an adjustment', function() {
+			var adjustment = fbMsngr.buildAdjustment("Name", 5);
+			expect(adjustment).to.have.property("name", "Name");
+			expect(adjustment).to.have.property("amount", 5);
+		});
+	});
+
+	describe("buildOrderSummary()", function() {
+		it('Should build an order summary', function() {
+			var summary = fbMsngr.buildOrderSummary(100, 3, 20, 123);
+			expect(summary).to.have.property("subtotal", 100);
+			expect(summary).to.have.property("shipping_cost", 3);
+			expect(summary).to.have.property("total_tax", 20);
+			expect(summary).to.have.property("total_cost", 123);
+		});
 	});
 
 	describe("getProfile()", function() {

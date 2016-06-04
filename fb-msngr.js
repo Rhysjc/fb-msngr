@@ -117,6 +117,43 @@ module.exports = function(config) {
 		sendMessage(recipient, message, cb);
 	};
 
+	module.sendReceiptTemplateMessage = function(recipient, name, ordernum, currency, method, timestamp, url, elements, address, summary, adjustments, cb) {
+		var message = {
+			attachment: {
+				type: 'template',
+				payload: {
+					template_type: 'receipt',
+					recipient_name: name,
+					order_number: ordernum,
+					currency: currency,
+					payment_method: method,
+					timestamp: timestamp,
+					order_url: url,
+					elements: elements,
+					address: address,
+					summary: summary,
+					adjustments: adjustments
+				}
+			}
+		};
+
+		if(timestamp === "" || timestamp === null || timestamp === undefined ) {
+			delete message.payload.timestamp;
+		}
+		if(url === "" || url === null || url === undefined ) {
+			delete message.payload.order_url;
+		}
+		if(Object.keys(address).length === 0 || address === null || address === undefined ) {
+			delete message.payload.address;
+		}
+		if(adjustments.length === 0 || adjustments === null || adjustments === undefined ) {
+			delete message.payload.adjustments;
+		}
+
+		sendMessage(recipient, message, cb);
+
+	};
+
 	//Builder functions. Here we need to build bubbles and buttons. Stick to limits
 	module.buildBubble = function(title, url, image, subtitle, buttons) {
 		var bubble = {
@@ -147,6 +184,58 @@ module.exports = function(config) {
 			payload: payload
 		};
 		return button;
+	};
+
+	module.buildOrderElement = function(title, subtitle, quantity, price, currency, image) {
+		var element = {
+			title: title,
+			subtitle: subtitle,
+			quantity: quantity,
+			price: price,
+			currency: currency,
+			image_url: image
+		};
+
+		deleteEmptyProperties(element);
+		return element;
+	};
+
+	module.buildAddress = function(street1, street2, city, postal, state, country) {
+		var address = {
+			street_1: street1,
+			street_2: street2,
+			city: city,
+			postal_code: postal,
+			state: state,
+			country: country
+		};
+
+		deleteEmptyProperties(address);
+
+		return address;
+	};
+
+	module.buildOrderSummary = function(subtotal, shipping, tax, cost) {
+		var summary = {
+			subtotal: subtotal,
+			shipping_cost: shipping,
+			total_tax: tax,
+			total_cost: cost
+		};
+
+		deleteEmptyProperties(summary);
+
+		return summary;
+	};
+
+	module.buildAdjustment = function(name, amount) {
+		var adjustment = {
+			name: name,
+			amount: amount
+		};
+		deleteEmptyProperties(adjustment);
+
+		return adjustment;
 	};
 
 	module.getProfile = function(id, cb) {
